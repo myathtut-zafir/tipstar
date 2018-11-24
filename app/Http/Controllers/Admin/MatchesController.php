@@ -12,6 +12,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+
 class MatchesController extends Controller
 {
     use APIResponser;
@@ -93,6 +94,25 @@ class MatchesController extends Controller
 
     function getAllMatches(Request $request)
     {
+        $img = \Image::make(public_path('pro-blank.jpg'));
+
+// write text
+        $img->text('The quick brown fox jumps over the lazy dog.');
+
+// write text at position
+        $img->text('The quick brown fox jumps over the lazy dog.', 120, 100);
+
+// use callback to define details
+        $img->text('foo', 10, 20, function($font) {
+            $font->size(24);
+            $font->color('#fdf6e3');
+            $font->align('center');
+            $font->valign('top');
+            $font->angle(45);
+        });
+
+        $img->save(public_path('pro-blank22.jpg'), 60);
+        exit();
         $matches = Match::all();
         $limit = $request->limit ?? 5;
         $currentPage = $request->page ?? 1;
