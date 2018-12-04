@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class MatchesController extends Controller
@@ -94,44 +95,18 @@ class MatchesController extends Controller
 
     function getAllMatches(Request $request)
     {
-        $img = \Image::make(public_path('pro-blank.jpg'));
 
-// write text
-        $img->text('The quick brown fox jumps over the lazy dog.');
+//        $matches = Match::all();
+        $now = Carbon::today()->toDateTimeString();
+            $match = Match::where('match_start_at','>=', $now)->first();
 
-// write text at position
-        $img->text('The quick brown fox jumps over the lazy dog.', 120, 100);
+            if($match){
+                $matches = Match::where('week_number', $match->week_number)->get();
+                return $this->respondCollection("Success Match", $matches);
+            }
+//        return $match;
 
-// use callback to define details
-        $img->text('foo', 10, 20, function($font) {
-            $font->size(24);
-            $font->color('#fdf6e3');
-            $font->align('center');
-            $font->valign('top');
-            $font->angle(45);
-        });
-
-        $img->save(public_path('pro-blank22.jpg'), 60);
-        exit();
-        $matches = Match::all();
-        $limit = $request->limit ?? 5;
-        $currentPage = $request->page ?? 1;
-//        $currentPage = LengthAwarePaginator::resolveCurrentPage();
-
-        if ($request->league != "") {
-            $matches = Match::where('league', $request->league)->paginatior($limit, ['*'], 'page', $currentPage);
-        }
-        if ($request->week_number != "") {
-            $matches = Match::where('week_number', $request->week_number)->get();
-        }
-        if ($request->week_number != "" && $request->league != "") {
-            $matches = Match::where('week_number', $request->week_number)->where('league', $request->league)->paginatior(1);
-        }
-        return $matches;
-
-        $paginatedItems = $this->paginator($request, $matches, $limit);
-
-        return $this->responseSucessWithPaginateCustomize($limit, $paginatedItems);
+        return $this->exceptionResponse("No Match Found", Response::HTTP_NOT_FOUND);
     }
 
     private function paginator(Request $request, $object, $perPage)
@@ -143,5 +118,43 @@ class MatchesController extends Controller
         $paginatedItems->setPath($request->url());
         return $paginatedItems;
     }
+
+
+
+//$limit = $request->limit ?? 5;
+//$currentPage = $request->page ?? 1;
+//        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+
+//        if ($request->league != "") {
+//            $matches = Match::where('league', $request->league)->paginatior($limit, ['*'], 'page', $currentPage);
+//        }
+//        if ($request->week_number != "") {
+//            $matches = Match::where('week_number', $request->week_number)->get();
+//        }
+//        if ($request->week_number != "" && $request->league != "") {
+//            $matches = Match::where('week_number', $request->week_number)->where('league', $request->league)->paginatior(1);
+//        }
+
+
+//        $paginatedItems = $this->paginator($request, $matches, $limit);
+//$img = \Image::make(public_path('pro-blank.jpg'));
+//
+//// write text
+//$img->text('The quick brown fox jumps over the lazy dog.');
+//
+//// write text at position
+//$img->text('The quick brown fox jumps over the lazy dog.', 120, 100);
+//
+//// use callback to define details
+//$img->text('foo', 10, 20, function($font) {
+//    $font->size(24);
+//    $font->color('#fdf6e3');
+//    $font->align('center');
+//    $font->valign('top');
+//    $font->angle(45);
+//});
+//
+//$img->save(public_path('pro-blank22.jpg'), 60);
+//exit();
 
 }
