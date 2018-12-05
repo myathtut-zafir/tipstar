@@ -46,6 +46,26 @@ class MatchesController extends Controller
         $match->result = "";
         $match->latest_odd = $request->latest_odd;
         $match->latest_odd_created_at = Carbon::now();
+
+        $img = \Image::make(public_path('pro-blank.jpg'));
+        /// write text
+        $img->text('The quick brown fox jumps over the lazy dog.');
+
+// write text at position
+        $img->text('The quick brown fox jumps over the lazy dog.', 120, 100);
+
+// use callback to define details
+        $img->text('foo', 10, 20, function ($font) {
+            $font->size(24);
+            $font->color('#fdf6e3');
+            $font->align('center');
+            $font->valign('top');
+            $font->angle(45);
+        });
+        $match->save();
+        $file_path = public_path('image/') . $match->id."HELLO.jpg";
+        $img->save($file_path, 60);
+        $match->image_url='image/'.$match->id."HELLO.jpg";
         $match->save();
         return redirect()->back();
 
@@ -93,18 +113,17 @@ class MatchesController extends Controller
         return Response()->json($teams);
     }
 
-    function getAllMatches(Request $request)
+    function getAllMatches()
     {
 
-//        $matches = Match::all();
-        $now = Carbon::today()->toDateTimeString();
-            $match = Match::where('match_start_at','>=', $now)->first();
 
-            if($match){
-                $matches = Match::where('week_number', $match->week_number)->get();
-                return $this->respondCollection("Success Match", $matches);
-            }
-//        return $match;
+        $now = Carbon::today()->toDateTimeString();
+        $match = Match::where('match_start_at', '>=', $now)->first();
+
+        if ($match) {
+            $matches = Match::where('week_number', $match->week_number)->where('match_start_at', '>=', $now)->get();
+            return $this->respondCollection("Success Match", $matches);
+        }
 
         return $this->exceptionResponse("No Match Found", Response::HTTP_NOT_FOUND);
     }
@@ -137,24 +156,5 @@ class MatchesController extends Controller
 
 
 //        $paginatedItems = $this->paginator($request, $matches, $limit);
-//$img = \Image::make(public_path('pro-blank.jpg'));
-//
-//// write text
-//$img->text('The quick brown fox jumps over the lazy dog.');
-//
-//// write text at position
-//$img->text('The quick brown fox jumps over the lazy dog.', 120, 100);
-//
-//// use callback to define details
-//$img->text('foo', 10, 20, function($font) {
-//    $font->size(24);
-//    $font->color('#fdf6e3');
-//    $font->align('center');
-//    $font->valign('top');
-//    $font->angle(45);
-//});
-//
-//$img->save(public_path('pro-blank22.jpg'), 60);
-//exit();
 
 }
