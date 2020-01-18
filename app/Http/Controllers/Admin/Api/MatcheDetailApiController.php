@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Api;
 use App\Http\Controllers\Traits\APIResponser;
 use App\Leagues;
 use App\Match;
+use App\MatchDetail;
 use App\Teams;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -18,9 +19,9 @@ class MatcheDetailApiController extends Controller
 {
     use APIResponser;
 
-    function index()
+    function show($matchDateId)
     {
-        $matches = Match::all();
-        return view('admin.matches.index', compact('matches'));
+        $matches = MatchDetail::where('match_date_id', $matchDateId)->get();
+        return $this->respondCollection('success to get match detail lists', $matches);
     }
 }

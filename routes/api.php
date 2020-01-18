@@ -17,5 +17,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('matches', 'Admin\MatchesController@getAllMatches');
-Route::get('matche-date', 'Admin\Api\HomeApiController@index');
+Route::get('match-date', 'Admin\Api\HomeApiController@index');
+Route::get('match-detail/{matchDateId}', 'Admin\Api\MatcheDetailApiController@show');
 
