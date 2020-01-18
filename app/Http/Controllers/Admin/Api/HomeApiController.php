@@ -18,7 +18,7 @@ class HomeApiController extends Controller
         $todayDate = Carbon::now()->toDateString();
         $previousDate = Carbon::now()->subDays(1)->toDateString();
 //        Log::info('dd', ['data' => $todayDate]);
-        $machData = MatchDate::whereBetween('match_date', [$previousDate, $todayDate])->get();
+        $machData = MatchDate::whereBetween('match_date', [$previousDate, $todayDate])->with('matchDetail')->get();
 
         return $this->respondCollection('success to get match', $machData);
     }
