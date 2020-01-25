@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\APIResponser;
+use App\Http\Resources\MatchDateResource;
 use App\MatchDate;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -20,7 +21,8 @@ class HomeApiController extends Controller
 //        Log::info('dd', ['data' => $todayDate]);
         $machData = MatchDate::whereBetween('match_date', [$previousDate, $todayDate])->with('matchDetail')->get();
 
-        return $this->respondCollection('success to get match', $machData);
+        return $this->respondCollection('success to get match', MatchDateResource::collection($machData));
+//        return $this->respondCollection('success to get match', $machData);
     }
 
 }
