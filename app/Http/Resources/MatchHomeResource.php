@@ -19,11 +19,9 @@ class MatchHomeResource extends JsonResource
         return [
             'id' => $this->id,
             'league' => $this->league,
-            'home_team' => $this->home_team,
-            'away_team' => $this->away_team,
             'tip_team' => $this->tip_team,
             'level' => $this->level,
-            'tip_odd' => $this->tip_odd,
+            'tip_odd' => $this->tip_odd ?? "-0.5",
         ];
     }
 

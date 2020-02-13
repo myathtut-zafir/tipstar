@@ -14,15 +14,19 @@ class HomeApiController extends Controller
 {
     use APIResponser;
 
-    public function index()
+    public function index(Request $request)
     {
-        $todayDate = Carbon::now()->toDateString();
-        $previousDate = Carbon::now()->subDays(1)->toDateString();
-//        Log::info('dd', ['data' => $todayDate]);
+
+        if ($request->input('date') === null || $request->input('date') === "") {
+            $todayDate = Carbon::now()->toDateString();
+            $previousDate = Carbon::now()->subDays(1)->toDateString();
+        } else {
+            $todayDate = $request->input('date');
+            $previousDate = Carbon::parse($todayDate)->subDays(1)->toDateString();
+        }
         $machData = MatchDate::whereBetween('match_date', [$previousDate, $todayDate])->with('matchDetail')->get();
 
         return $this->respondCollection('success to get match', MatchDateResource::collection($machData));
-//        return $this->respondCollection('success to get match', $machData);
     }
 
 }
