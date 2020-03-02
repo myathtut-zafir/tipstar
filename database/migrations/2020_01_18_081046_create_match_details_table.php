@@ -18,15 +18,25 @@ class CreateMatchDetailsTable extends Migration
             $table->integer('match_date_id');
             $table->string('league')->nullable();
             $table->time('time')->nullable();
+
             $table->string('home_team')->nullable();
+            $table->string('home_team_logo')->nullable();
+            $table->string('asia_home_hdp')->nullable();
+            $table->string('asia_home_odd')->nullable();
+            $table->string('asia_home_goal_line_odd')->nullable();
+            $table->string('mm_home_hdp')->nullable();
+            $table->string('mm_home_goal_line')->nullable();
+
             $table->string('away_team')->nullable();
-            $table->string('tip_team')->nullable();
-            $table->string('asia_hdp')->nullable();
-            $table->string('mm_hdp')->nullable();
-            $table->string('home_hdp_odd')->nullable();
-            $table->string('away_hdp_odd')->nullable();
+            $table->string('away_team_logo')->nullable();
+            $table->string('asia_away_hdp')->nullable();
+            $table->string('asia_away_odd')->nullable();
+            $table->string('asia_away_goal_line_odd')->nullable();
+            $table->string('mm_away_hdp')->nullable();
+            $table->string('mm_away_goal_line')->nullable();
+
             $table->string('asia_goal_line')->nullable();
-            $table->string('mm_goal_line')->nullable();
+            $table->string('tip_team')->nullable();
             $table->integer('level')->default(0);
             $table->text('result')->nullable();
             $table->timestamps();
