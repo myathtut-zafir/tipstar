@@ -19,4 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('matches', 'Admin\MatchesController@getAllMatches');
 Route::get('match-date', 'Admin\Api\HomeApiController@index');
 Route::get('match-detail/{matchDateId}', 'Admin\Api\MatcheDetailApiController@show');
+//Auth
+Route::post('social-login/{provider}', 'Auth\AuthController@SocialSignup')->name('customer.login');
 
